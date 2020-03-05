@@ -1,9 +1,12 @@
 package com.vladislavHasporian.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Course {
@@ -14,6 +17,11 @@ public class Course {
 	
 	private String article;
 	private String review;
+	
+	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
+				     	 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinColumn(name="student_id")
+	private Student student;
 	
 	public Course() {}
 	
@@ -44,6 +52,14 @@ public class Course {
 
 	public void setReview(String review) {
 		this.review = review;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 	
 }

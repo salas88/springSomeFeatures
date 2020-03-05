@@ -3,15 +3,14 @@ package com.vladislavHasporian.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -30,12 +29,11 @@ public class Student {
 	private String LastName;
 	
 	@NotNull(message="must be set")
-	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="must mutch the pattern examples@youEmailName.domain")
+	@Email
 	private String email;
 	
-	@OneToMany(fetch=FetchType.LAZY)
-	@JoinColumn(name="id_course")
+	@OneToMany(mappedBy="student", cascade= {CascadeType.DETACH, CascadeType.MERGE,
+											 CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Course> courses;
 	
 	public Student() {}
@@ -46,11 +44,16 @@ public class Student {
 		this.email = email;
 	}
 	
-	
+	// add dependency if courses create for this student
 	public void addCourse(Course course) {
+		
 		if(courses == null)
 			courses = new ArrayList<>();
+		
 		courses.add(course);
+		
+		course.setStudent(this);
+		
 	}
 	
 	public int getId() {
