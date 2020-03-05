@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -32,12 +34,28 @@ public class Course {
 	@JoinColumn(name="course_id")
 	private List<Review> reviews;
 	
+	@ManyToMany(cascade= {CascadeType.DETACH, CascadeType.MERGE,
+	     	 	CascadeType.PERSIST, CascadeType.REFRESH},
+			 	fetch=FetchType.LAZY)
+	@JoinTable(name="course_instrictor", joinColumns=@JoinColumn(name="course_id"),
+							inverseJoinColumns=@JoinColumn(name="instructor_id"))
+	private List<Instructor> instructors;
+	
 	public void addReview(Review review) {
 		if(reviews == null) {
 			reviews = new ArrayList<>();
 		}
 		reviews.add(review);
 	}
+	
+	public void addInstructor(Instructor theInstructor) {
+		if(instructors == null) {
+			instructors = new ArrayList<>();
+		}else
+			instructors.add(theInstructor);
+	}
+	
+	
 	
 	public Course() {}
 	
@@ -85,5 +103,14 @@ public class Course {
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
 	}
+
+	public List<Instructor> getInstructors() {
+		return instructors;
+	}
+
+	public void setInstructors(List<Instructor> instructors) {
+		this.instructors = instructors;
+	}
+	
 	
 }
