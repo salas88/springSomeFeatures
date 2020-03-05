@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html	xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>List Students</title>
+	</head>
+	<body>
+		<h2>List Students</h2>
+		<a th:href="@{/addNewStudent}">Add Student</a>
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>first</th>
+					<th>last</th>
+					<th>email</th>
+				</tr>
+			</thead>
+			<tbody th:each="student : ${students}">
+				<tr>
+					<td th:text="${student.id}"></td>
+					<td th:text="${student.firstName}"></td>
+					<td th:text="${student.LastName}"></td>
+					<td th:text="${student.email}"></td>
+					<td>
+						<a th:href="@{/update(id=${student.id})}">update</a>
+						<a th:href="@{/delete(id=${student.id})}"
+						onclick="if(!(confirm('are you sure you want delete student?')))return false">delete</a>
+					</td>
+					
+					
+						<td>
+						<div th:if="${student.courses  == null}">
+								
+						 <a th:href="@{createCourseObject(id=${student.id})}"  class="btn btn-secondary btn-sm">Add</a>
+						  		
+						</div>
+						<div th:if="${student.courses != null}">
+						  	<a th:href="@{moreForId(id=${student.id})}"  class="btn btn-warning btn-sm">more</a>
+						</div>
+						
+						
+			
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>
