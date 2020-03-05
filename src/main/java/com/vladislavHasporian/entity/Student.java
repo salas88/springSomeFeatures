@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -27,6 +28,10 @@ public class Student {
 	@NotNull
 	@Size(min=5, message="is required")
 	private String LastName;
+	
+	@NotNull(message="must be set")
+	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="must mutch the pattern examples@youEmailName.domain")
 	private String email;
 	
 	@OneToMany(fetch=FetchType.LAZY)
